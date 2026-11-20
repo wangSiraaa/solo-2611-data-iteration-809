@@ -1,0 +1,406 @@
+{
+  "name": "gap_recovery",
+  "description": "ABS(1),GAP(1),ABS(9),DELTA(1),REPEAT(1). A2 falls in the GAP and is MISSING; the DELTA after the GAP recovers from the fresh ABS(9). A single page before command 5 lets A2 read commands 1-2 and A5 read command 5.",
+  "layout": {
+    "format": "plate-layout/v1",
+    "plate_id": "plate-gap_recovery",
+    "rows": 1,
+    "cols": 5,
+    "version": 6,
+    "digest": "f554b785798f44ca0bb99bd11ed41551968f07caba2c74fb980ab074f38d6f38",
+    "min_replicates": 1,
+    "max_replicates": 1,
+    "sample_bounds": [],
+    "wells": [
+      {
+        "well": "A1",
+        "row": 0,
+        "col": 0,
+        "role": "blank",
+        "expected": "0",
+        "sample_id": null,
+        "blocked": false,
+        "provenance": "set_blank"
+      },
+      {
+        "well": "A2",
+        "row": 0,
+        "col": 1,
+        "role": "blank",
+        "expected": "0",
+        "sample_id": null,
+        "blocked": false,
+        "provenance": "set_blank"
+      },
+      {
+        "well": "A3",
+        "row": 0,
+        "col": 2,
+        "role": "blank",
+        "expected": "0",
+        "sample_id": null,
+        "blocked": false,
+        "provenance": "set_blank"
+      },
+      {
+        "well": "A4",
+        "row": 0,
+        "col": 3,
+        "role": "blank",
+        "expected": "0",
+        "sample_id": null,
+        "blocked": false,
+        "provenance": "set_blank"
+      },
+      {
+        "well": "A5",
+        "row": 0,
+        "col": 4,
+        "role": "blank",
+        "expected": "0",
+        "sample_id": null,
+        "blocked": false,
+        "provenance": "set_blank"
+      }
+    ]
+  },
+  "stream": {
+    "text": [
+      "ABS(1)",
+      "GAP(1)",
+      "ABS(9)",
+      "DELTA(1)",
+      "REPEAT(1)"
+    ],
+    "records": [
+      {
+        "op": "ABS",
+        "value": "1"
+      },
+      {
+        "op": "GAP",
+        "count": 1
+      },
+      {
+        "op": "ABS",
+        "value": "9"
+      },
+      {
+        "op": "DELTA",
+        "value": "1"
+      },
+      {
+        "op": "REPEAT",
+        "count": 1
+      }
+    ]
+  },
+  "directory": {
+    "format": "command-directory/v1",
+    "layout_digest": "f554b785798f44ca0bb99bd11ed41551968f07caba2c74fb980ab074f38d6f38",
+    "stream_digest": "43009ff0f8f2d76db68696e6027bbea6009f289693cdad769344e19493d99924",
+    "used_wells": [
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A5"
+    ],
+    "commands": [
+      {
+        "op": "ABS",
+        "value": "1"
+      },
+      {
+        "op": "GAP",
+        "count": 1
+      },
+      {
+        "op": "ABS",
+        "value": "9"
+      },
+      {
+        "op": "DELTA",
+        "value": "1"
+      },
+      {
+        "op": "REPEAT",
+        "count": 1
+      }
+    ],
+    "command_text": [
+      "ABS(1)",
+      "GAP(1)",
+      "ABS(9)",
+      "DELTA(1)",
+      "REPEAT(1)"
+    ],
+    "ranges": [
+      {
+        "command_index": 1,
+        "op": "ABS",
+        "start": 0,
+        "end": 1,
+        "wells": [
+          "A1"
+        ],
+        "missing": false
+      },
+      {
+        "command_index": 2,
+        "op": "GAP",
+        "start": 1,
+        "end": 2,
+        "wells": [
+          "A2"
+        ],
+        "missing": true
+      },
+      {
+        "command_index": 3,
+        "op": "ABS",
+        "start": 2,
+        "end": 3,
+        "wells": [
+          "A3"
+        ],
+        "missing": false
+      },
+      {
+        "command_index": 4,
+        "op": "DELTA",
+        "start": 3,
+        "end": 4,
+        "wells": [
+          "A4"
+        ],
+        "missing": false
+      },
+      {
+        "command_index": 5,
+        "op": "REPEAT",
+        "start": 4,
+        "end": 5,
+        "wells": [
+          "A5"
+        ],
+        "missing": false
+      }
+    ],
+    "boundary_memory": [
+      null,
+      "1",
+      null,
+      "9",
+      "10"
+    ],
+    "memory_after": [
+      "1",
+      null,
+      "9",
+      "10",
+      "10"
+    ],
+    "decoded": {
+      "A1": "1",
+      "A3": "9",
+      "A4": "10",
+      "A5": "10"
+    },
+    "missing": [
+      "A2"
+    ]
+  },
+  "load": {
+    "A2": 1,
+    "A5": 1
+  },
+  "max_pages": 1,
+  "allocation": {
+    "layout_digest": "f554b785798f44ca0bb99bd11ed41551968f07caba2c74fb980ab074f38d6f38",
+    "stream_digest": "43009ff0f8f2d76db68696e6027bbea6009f289693cdad769344e19493d99924",
+    "max_pages": 1,
+    "selected_boundaries": [
+      1,
+      5
+    ],
+    "paid_boundaries": [
+      5
+    ],
+    "pages_used": 1,
+    "total_weighted_cost": 3,
+    "command_weights": [
+      {
+        "command": 2,
+        "weight": 1
+      },
+      {
+        "command": 5,
+        "weight": 1
+      }
+    ],
+    "queries": [
+      {
+        "well": "A2",
+        "frequency": 1,
+        "covering_command": 2,
+        "start_boundary": 1,
+        "commands": [
+          1,
+          2
+        ],
+        "commands_read": 2,
+        "weighted_cost": 2,
+        "missing": true,
+        "value": null
+      },
+      {
+        "well": "A5",
+        "frequency": 1,
+        "covering_command": 5,
+        "start_boundary": 5,
+        "commands": [
+          5
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1,
+        "missing": false,
+        "value": {
+          "exact": "10",
+          "float": 10.0
+        }
+      }
+    ]
+  },
+  "shipped_package": {
+    "layout_digest": "f554b785798f44ca0bb99bd11ed41551968f07caba2c74fb980ab074f38d6f38",
+    "stream_digest": "43009ff0f8f2d76db68696e6027bbea6009f289693cdad769344e19493d99924",
+    "commands": [
+      {
+        "op": "ABS",
+        "value": "1"
+      },
+      {
+        "op": "GAP",
+        "count": 1
+      },
+      {
+        "op": "ABS",
+        "value": "9"
+      },
+      {
+        "op": "DELTA",
+        "value": "1"
+      },
+      {
+        "op": "REPEAT",
+        "count": 1
+      }
+    ],
+    "ranges": [
+      {
+        "command_index": 1,
+        "op": "ABS",
+        "start": 0,
+        "end": 1,
+        "wells": [
+          "A1"
+        ],
+        "missing": false
+      },
+      {
+        "command_index": 2,
+        "op": "GAP",
+        "start": 1,
+        "end": 2,
+        "wells": [
+          "A2"
+        ],
+        "missing": true
+      },
+      {
+        "command_index": 3,
+        "op": "ABS",
+        "start": 2,
+        "end": 3,
+        "wells": [
+          "A3"
+        ],
+        "missing": false
+      },
+      {
+        "command_index": 4,
+        "op": "DELTA",
+        "start": 3,
+        "end": 4,
+        "wells": [
+          "A4"
+        ],
+        "missing": false
+      },
+      {
+        "command_index": 5,
+        "op": "REPEAT",
+        "start": 4,
+        "end": 5,
+        "wells": [
+          "A5"
+        ],
+        "missing": false
+      }
+    ],
+    "snapshots": [
+      {
+        "boundary": 1,
+        "memory": null,
+        "stream_digest": "43009ff0f8f2d76db68696e6027bbea6009f289693cdad769344e19493d99924"
+      },
+      {
+        "boundary": 5,
+        "memory": "10",
+        "stream_digest": "43009ff0f8f2d76db68696e6027bbea6009f289693cdad769344e19493d99924"
+      }
+    ]
+  },
+  "replay": {
+    "ok": true,
+    "queries": [
+      {
+        "well": "A2",
+        "result": {
+          "well": "A2",
+          "frequency": 1,
+          "covering_command": 2,
+          "start_boundary": 1,
+          "commands": [
+            1,
+            2
+          ],
+          "commands_read": 2,
+          "weighted_cost": 2,
+          "missing": true,
+          "value": null
+        }
+      },
+      {
+        "well": "A5",
+        "result": {
+          "well": "A5",
+          "frequency": 1,
+          "covering_command": 5,
+          "start_boundary": 5,
+          "commands": [
+            5
+          ],
+          "commands_read": 1,
+          "weighted_cost": 1,
+          "missing": false,
+          "value": {
+            "exact": "10",
+            "float": 10.0
+          }
+        }
+      }
+    ]
+  }
+}

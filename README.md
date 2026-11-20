@@ -46,6 +46,9 @@ plate_effects/
   rational.py    # 有理数解析、精确 RREF/秩/零空间/线性求解
   design.py      # 事务式设计服务、布局校验、发布产品与摘要
   warehouse.py   # 读数导入、精确最小二乘、可识别性、样品统计、解释报告、缓存
+  compressed.py  # 命令流解析/解码、命令边界目录、流摘要
+  retrieval.py   # 快照最优配发、随设备包裹、手持查阅器回放
+  compressed_scenarios.py  # 可重放的压缩流文件例
   scenarios.py   # 6 个合成场景（已知 b/r/c）
   cli.py         # 演示入口
 tests/
@@ -78,3 +81,43 @@ python3 -m venv .venv && .venv/bin/pip install numpy pytest
 - 对照法方程的精确 RREF 与行变换矩阵按 `(layout.digest, 已观测对照孔集合)` 缓存；
   不同的缺测对照会产生不同缓存键，不会误用旧分解。
 - 每板上限 30，每板至多 96 孔；每板独立拟合，无跨板随机效应。
+
+## 压缩输入端与快照配发端
+
+`plate_effects/compressed.py` 与 `plate_effects/retrieval.py` 在原有读数仓之上新增两个组件。
+
+### 命令流解码（`compressed.py`）
+
+合成扫描仪把一块板的**已用孔**按行优先顺序编码为不可分割的变长命令：
+
+```
+ABS(x)     发出并记住有理值 x
+DELTA(d)   记忆值加 d 后发出新值
+REPEAT(k)  连续发出当前记忆值 k 次
+GAP(k)     连续标记 k 个缺测并清空记忆
+```
+
+`k` 为正整数；初始无记忆、`GAP` 清空记忆，因此无记忆时的 `DELTA`/`REPEAT` 是坏流。
+解码必须**恰好**消费整条流：越界（命令需要超过剩余孔数）、少解出孔、结尾仍有多余命令
+一律拒绝。完整解码得到 `well -> Fraction` 映射（`GAP` 孔缺席），直接交给
+`ReadoutWarehouse.import_compressed`，走原有坐标导入路径（重复/板外/未用孔校验不变）。
+`warehouse.directory_for(run)` 取回 `CommandDirectory`：绑定布局摘要、原流、展开孔序、
+命令到孔的范围索引与每个边界（命令之前）的记忆状态。
+
+### 快照配发（`retrieval.py`）
+
+`LookupViewer` 拥有自己的正整数访问频数表与内存页配额。每个非初始命令边界可选一张
+等大快照，最多给定张数；流首（边界 1）总是可用且免费。一次查询从**不晚于目标孔的
+最近已配发边界**开始，读到覆盖该孔的整条命令为止，成本是实际读取的命令数，于是
+`REPEAT` 中间永远不是免费起点。`allocate` 使全部频数加权成本最小：先少用页，再按
+所选一基命令序号的升序表取字典序最小。`ship` 只把**原流、命令到孔的范围索引、本次
+选中的快照**交给设备；完整可选状态留在配发端。每次查询由 `LookupViewer` 真正回放
+原流恢复目标值或缺测。快照与包裹携带 `stream_digest`，另一份流的快照会被拒绝。
+
+### 必读示例
+
+四个孔依次 `ABS(5)`、`DELTA(1)`、`DELTA(0)`、`DELTA(0)`，查第 2、4 孔各一次、一页：
+落在第 4 条前，两次分别读 2 条和 1 条（加权成本 3）。第 2 孔频数改为 3：落在第 2 条前，
+加权成本 6。改用 `ABS(5)`、`DELTA(1)`、`REPEAT(2)`：最优成本 3，第 2/3 条并列，字典序
+选第 2 条前。运行 `python -m plate_effects.cli compressed results/compressed/` 会写出可
+重放的文件例（含 GAP 后恢复、单命令产出多孔、零页行为）并打印逐查询恢复路径与结果。

@@ -1,0 +1,458 @@
+{
+  "basic": {
+    "description": "Four reads ABS(5),DELTA(1),DELTA(0),DELTA(0). Query A2 and A4 once each with one page. The page goes before command 4; A2 reads 2 commands and A4 reads 1.",
+    "stream": [
+      "ABS(5)",
+      "DELTA(1)",
+      "DELTA(0)",
+      "DELTA(0)"
+    ],
+    "load": {
+      "A2": 1,
+      "A4": 1
+    },
+    "max_pages": 1,
+    "selected_boundaries": [
+      1,
+      4
+    ],
+    "pages_used": 1,
+    "total_weighted_cost": 3,
+    "paths": [
+      {
+        "well": "A2",
+        "start_boundary": 1,
+        "commands": [
+          1,
+          2
+        ],
+        "commands_read": 2,
+        "weighted_cost": 2
+      },
+      {
+        "well": "A4",
+        "start_boundary": 4,
+        "commands": [
+          4
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1
+      }
+    ],
+    "replayed": [
+      {
+        "well": "A2",
+        "frequency": 1,
+        "covering_command": 2,
+        "start_boundary": 1,
+        "commands": [
+          1,
+          2
+        ],
+        "commands_read": 2,
+        "weighted_cost": 2,
+        "missing": false,
+        "value": {
+          "exact": "6",
+          "float": 6.0
+        }
+      },
+      {
+        "well": "A4",
+        "frequency": 1,
+        "covering_command": 4,
+        "start_boundary": 4,
+        "commands": [
+          4
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1,
+        "missing": false,
+        "value": {
+          "exact": "6",
+          "float": 6.0
+        }
+      }
+    ]
+  },
+  "heavy_a2": {
+    "description": "Same four reads, but A2 is queried three times. With one page the optimum moves to boundary 2: A2 reads 1 command (3 reads total) and A4 reads 3 commands, weighted cost 6.",
+    "stream": [
+      "ABS(5)",
+      "DELTA(1)",
+      "DELTA(0)",
+      "DELTA(0)"
+    ],
+    "load": {
+      "A2": 3,
+      "A4": 1
+    },
+    "max_pages": 1,
+    "selected_boundaries": [
+      1,
+      2
+    ],
+    "pages_used": 1,
+    "total_weighted_cost": 6,
+    "paths": [
+      {
+        "well": "A2",
+        "start_boundary": 2,
+        "commands": [
+          2
+        ],
+        "commands_read": 1,
+        "weighted_cost": 3
+      },
+      {
+        "well": "A4",
+        "start_boundary": 2,
+        "commands": [
+          2,
+          3,
+          4
+        ],
+        "commands_read": 3,
+        "weighted_cost": 3
+      }
+    ],
+    "replayed": [
+      {
+        "well": "A2",
+        "frequency": 3,
+        "covering_command": 2,
+        "start_boundary": 2,
+        "commands": [
+          2
+        ],
+        "commands_read": 1,
+        "weighted_cost": 3,
+        "missing": false,
+        "value": {
+          "exact": "6",
+          "float": 6.0
+        }
+      },
+      {
+        "well": "A4",
+        "frequency": 1,
+        "covering_command": 4,
+        "start_boundary": 2,
+        "commands": [
+          2,
+          3,
+          4
+        ],
+        "commands_read": 3,
+        "weighted_cost": 3,
+        "missing": false,
+        "value": {
+          "exact": "6",
+          "float": 6.0
+        }
+      }
+    ]
+  },
+  "repeat": {
+    "description": "Four reads via ABS(5),DELTA(1),REPEAT(2). Query A2 and A4 once each with one page. Cost 3; the tie between boundaries 2 and 3 is broken lexicographically to boundary 2.",
+    "stream": [
+      "ABS(5)",
+      "DELTA(1)",
+      "REPEAT(2)"
+    ],
+    "load": {
+      "A2": 1,
+      "A4": 1
+    },
+    "max_pages": 1,
+    "selected_boundaries": [
+      1,
+      2
+    ],
+    "pages_used": 1,
+    "total_weighted_cost": 3,
+    "paths": [
+      {
+        "well": "A2",
+        "start_boundary": 2,
+        "commands": [
+          2
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1
+      },
+      {
+        "well": "A4",
+        "start_boundary": 2,
+        "commands": [
+          2,
+          3
+        ],
+        "commands_read": 2,
+        "weighted_cost": 2
+      }
+    ],
+    "replayed": [
+      {
+        "well": "A2",
+        "frequency": 1,
+        "covering_command": 2,
+        "start_boundary": 2,
+        "commands": [
+          2
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1,
+        "missing": false,
+        "value": {
+          "exact": "6",
+          "float": 6.0
+        }
+      },
+      {
+        "well": "A4",
+        "frequency": 1,
+        "covering_command": 3,
+        "start_boundary": 2,
+        "commands": [
+          2,
+          3
+        ],
+        "commands_read": 2,
+        "weighted_cost": 2,
+        "missing": false,
+        "value": {
+          "exact": "6",
+          "float": 6.0
+        }
+      }
+    ]
+  },
+  "gap_recovery": {
+    "description": "ABS(1),GAP(1),ABS(9),DELTA(1),REPEAT(1). A2 falls in the GAP and is MISSING; the DELTA after the GAP recovers from the fresh ABS(9). A single page before command 5 lets A2 read commands 1-2 and A5 read command 5.",
+    "stream": [
+      "ABS(1)",
+      "GAP(1)",
+      "ABS(9)",
+      "DELTA(1)",
+      "REPEAT(1)"
+    ],
+    "load": {
+      "A2": 1,
+      "A5": 1
+    },
+    "max_pages": 1,
+    "selected_boundaries": [
+      1,
+      5
+    ],
+    "pages_used": 1,
+    "total_weighted_cost": 3,
+    "paths": [
+      {
+        "well": "A2",
+        "start_boundary": 1,
+        "commands": [
+          1,
+          2
+        ],
+        "commands_read": 2,
+        "weighted_cost": 2
+      },
+      {
+        "well": "A5",
+        "start_boundary": 5,
+        "commands": [
+          5
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1
+      }
+    ],
+    "replayed": [
+      {
+        "well": "A2",
+        "frequency": 1,
+        "covering_command": 2,
+        "start_boundary": 1,
+        "commands": [
+          1,
+          2
+        ],
+        "commands_read": 2,
+        "weighted_cost": 2,
+        "missing": true,
+        "value": null
+      },
+      {
+        "well": "A5",
+        "frequency": 1,
+        "covering_command": 5,
+        "start_boundary": 5,
+        "commands": [
+          5
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1,
+        "missing": false,
+        "value": {
+          "exact": "10",
+          "float": 10.0
+        }
+      }
+    ]
+  },
+  "multi_well_command": {
+    "description": "ABS(7),REPEAT(3) covers A2,A3,A4 in one command. Query the middle well A3 and the last well A4: both must read the whole command 2, so the middle of a REPEAT is never a free start.",
+    "stream": [
+      "ABS(7)",
+      "REPEAT(3)"
+    ],
+    "load": {
+      "A3": 1,
+      "A4": 1
+    },
+    "max_pages": 1,
+    "selected_boundaries": [
+      1,
+      2
+    ],
+    "pages_used": 1,
+    "total_weighted_cost": 2,
+    "paths": [
+      {
+        "well": "A3",
+        "start_boundary": 2,
+        "commands": [
+          2
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1
+      },
+      {
+        "well": "A4",
+        "start_boundary": 2,
+        "commands": [
+          2
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1
+      }
+    ],
+    "replayed": [
+      {
+        "well": "A3",
+        "frequency": 1,
+        "covering_command": 2,
+        "start_boundary": 2,
+        "commands": [
+          2
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1,
+        "missing": false,
+        "value": {
+          "exact": "7",
+          "float": 7.0
+        }
+      },
+      {
+        "well": "A4",
+        "frequency": 1,
+        "covering_command": 2,
+        "start_boundary": 2,
+        "commands": [
+          2
+        ],
+        "commands_read": 1,
+        "weighted_cost": 1,
+        "missing": false,
+        "value": {
+          "exact": "7",
+          "float": 7.0
+        }
+      }
+    ]
+  },
+  "zero_pages": {
+    "description": "ABS(5),DELTA(1),DELTA(0),DELTA(0) with a zero page quota. Only the free head boundary 1 is available, so A2 reads 2 commands and A4 reads 4, weighted cost 6.",
+    "stream": [
+      "ABS(5)",
+      "DELTA(1)",
+      "DELTA(0)",
+      "DELTA(0)"
+    ],
+    "load": {
+      "A2": 1,
+      "A4": 1
+    },
+    "max_pages": 0,
+    "selected_boundaries": [
+      1
+    ],
+    "pages_used": 0,
+    "total_weighted_cost": 6,
+    "paths": [
+      {
+        "well": "A2",
+        "start_boundary": 1,
+        "commands": [
+          1,
+          2
+        ],
+        "commands_read": 2,
+        "weighted_cost": 2
+      },
+      {
+        "well": "A4",
+        "start_boundary": 1,
+        "commands": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "commands_read": 4,
+        "weighted_cost": 4
+      }
+    ],
+    "replayed": [
+      {
+        "well": "A2",
+        "frequency": 1,
+        "covering_command": 2,
+        "start_boundary": 1,
+        "commands": [
+          1,
+          2
+        ],
+        "commands_read": 2,
+        "weighted_cost": 2,
+        "missing": false,
+        "value": {
+          "exact": "6",
+          "float": 6.0
+        }
+      },
+      {
+        "well": "A4",
+        "frequency": 1,
+        "covering_command": 4,
+        "start_boundary": 1,
+        "commands": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "commands_read": 4,
+        "weighted_cost": 4,
+        "missing": false,
+        "value": {
+          "exact": "6",
+          "float": 6.0
+        }
+      }
+    ]
+  }
+}

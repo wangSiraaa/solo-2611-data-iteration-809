@@ -634,6 +634,7 @@ class ReadoutWarehouse:
         self._plate_ids: set[str] = set()
         self._runs: dict[str, ReadoutRun] = {}
         self._fits: dict[str, FitReport] = {}
+        self._directories: dict[str, object] = {}
         self._run_counter = itertools.count(1)
 
     # -- layouts ---------------------------------------------------------------
@@ -698,6 +699,50 @@ class ReadoutWarehouse:
             return self._runs[run_id]
         except KeyError as exc:
             raise RunNotFound(run_id) from exc
+
+    # -- compressed input ------------------------------------------------------
+    def import_compressed(
+        self,
+        layout: PublishedLayout | Mapping,
+        tokens: object,
+        *,
+        run_id: str | None = None,
+        note: str | None = None,
+        expect_digest: str | None = None,
+    ) -> ReadoutRun:
+        """Decode a compressed command stream and import it as a normal run.
+
+        Full decoding produces a ``well -> Fraction`` mapping which travels
+        through the ordinary coordinate import path, so every import invariant
+        (out-of-plate, unused/blocked, duplicate) still applies.  The
+        ``CommandDirectory`` built here is available from
+        :meth:`directory_for` for the snapshot/lookup side.
+        """
+
+        from .compressed import CommandDirectory
+
+        published = _coerce_layout(layout)
+        directory = CommandDirectory.build(published, tokens)
+        run = self.import_run(
+            published,
+            directory.to_measurements(),
+            run_id=run_id,
+            note=note,
+            expect_digest=expect_digest,
+        )
+        self._directories[run.run_id] = directory
+        return run
+
+    def directory_for(self, run_or_id: ReadoutRun | str) -> "object":
+        from .compressed import CommandDirectory
+
+        run = self.run(run_or_id) if isinstance(run_or_id, str) else run_or_id
+        try:
+            return self._directories[run.run_id]
+        except KeyError as exc:
+            raise WarehouseError(
+                f"run {run.run_id!r} was not imported from a compressed stream"
+            ) from exc
 
     def runs(self) -> tuple[ReadoutRun, ...]:
         return tuple(self._runs.values())
